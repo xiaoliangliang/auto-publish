@@ -1,0 +1,401 @@
+:root {
+  --bg: #f6f8fb;
+  --panel: #ffffff;
+  --panel-soft: #f1f5f9;
+  --line: #dde5ef;
+  --text: #142033;
+  --muted: #697789;
+  --accent: #0f172a;
+  --accent-2: #2563eb;
+  --danger: #d92d20;
+  --success: #0f8a4b;
+  --warning: #b76e00;
+  --radius: 8px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "MiSans", "Microsoft YaHei UI", "Segoe UI", sans-serif;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+.shell {
+  width: min(1180px, calc(100vw - 48px));
+  margin: 44px auto;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: var(--muted);
+  font-size: 12px;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+h1,
+h2 {
+  margin: 0;
+}
+
+h1 {
+  font-size: 30px;
+  font-weight: 750;
+}
+
+h2 {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.notice {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  border: 1px solid #c7dcff;
+  border-radius: var(--radius);
+  background: #eaf2ff;
+  color: #233b63;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 18px;
+}
+
+.compose,
+.status-panel {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+  box-shadow: 0 14px 36px rgba(15, 23, 42, 0.06);
+}
+
+.compose {
+  padding: 22px;
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.field span {
+  color: #2f3b4b;
+  font-size: 14px;
+  font-weight: 650;
+}
+
+input,
+textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+  color: var(--text);
+  outline: none;
+}
+
+input {
+  height: 48px;
+  padding: 0 14px;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 128px;
+  padding: 14px;
+  line-height: 1.6;
+}
+
+input:focus,
+textarea:focus {
+  border-color: var(--accent-2);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.upload-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  gap: 16px;
+  margin: 20px 0;
+}
+
+.upload-box {
+  display: grid;
+  min-height: 152px;
+  place-items: center;
+  gap: 8px;
+  padding: 20px;
+  border: 2px dashed #cbd5e1;
+  border-radius: var(--radius);
+  background: #f8fafc;
+  cursor: pointer;
+  text-align: center;
+}
+
+.upload-box:hover {
+  border-color: var(--accent-2);
+  background: #eff6ff;
+}
+
+.upload-box input {
+  display: none;
+}
+
+.upload-icon {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  color: #64748b;
+  font-size: 30px;
+  line-height: 1;
+}
+
+.upload-box strong {
+  font-size: 15px;
+}
+
+.upload-box small {
+  max-width: 100%;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.platform-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.platform-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+  cursor: pointer;
+}
+
+.platform-card input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent);
+}
+
+.platform-card img {
+  width: 22px;
+  height: 22px;
+}
+
+.platform-card span {
+  min-width: 0;
+  overflow: hidden;
+  font-weight: 650;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.platform-card:has(input:checked) {
+  border-color: #93c5fd;
+  background: #eff6ff;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 22px;
+}
+
+.actions p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.primary-button,
+.ghost-button,
+.text-button,
+.refresh-button {
+  border: 0;
+  cursor: pointer;
+}
+
+.primary-button {
+  min-width: 140px;
+  height: 48px;
+  padding: 0 22px;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+}
+
+.primary-button:disabled {
+  cursor: progress;
+  opacity: 0.62;
+}
+
+.ghost-button {
+  height: 40px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+  color: var(--text);
+}
+
+.text-button {
+  background: transparent;
+  color: var(--accent-2);
+  font-size: 13px;
+}
+
+.status-panel {
+  align-self: start;
+  padding: 18px;
+  position: sticky;
+  top: 20px;
+}
+
+.hint {
+  margin: 12px 0 16px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.status-list {
+  display: grid;
+  gap: 10px;
+}
+
+.status-row {
+  display: grid;
+  grid-template-columns: 32px 24px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border-radius: var(--radius);
+  background: var(--panel-soft);
+}
+
+.status-row.active {
+  background: #dbeafe;
+}
+
+.status-row img {
+  width: 22px;
+  height: 22px;
+}
+
+.status-main {
+  min-width: 0;
+}
+
+.status-main strong,
+.status-main span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.status-main strong {
+  font-size: 14px;
+}
+
+.status-main span {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.refresh-button {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: transparent;
+  color: #475569;
+  font-size: 20px;
+}
+
+.status-badge {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.status-badge.ready,
+.status-badge.done {
+  color: var(--success);
+}
+
+.status-badge.failed {
+  color: var(--danger);
+}
+
+.status-badge.running,
+.status-badge.opening,
+.status-badge.uploading,
+.status-badge.filling {
+  color: var(--accent-2);
+}
+
+.status-badge.warning {
+  color: var(--warning);
+}
+
+@media (max-width: 920px) {
+  .shell {
+    width: min(100vw - 28px, 720px);
+    margin: 24px auto;
+  }
+
+  .workspace,
+  .upload-grid,
+  .platform-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .status-panel {
+    position: static;
+  }
+}

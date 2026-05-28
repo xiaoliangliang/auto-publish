@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>短视频同步助手</title>
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Chrome Extension Workbench</p>
+          <h1>短视频同步助手</h1>
+        </div>
+        <button class="ghost-button" id="restoreDraftButton" type="button">恢复草稿</button>
+      </header>
+
+      <section class="notice">
+        <strong>人工确认发布</strong>
+        <span>插件会依次打开平台、上传视频并填充文案。每个平台停在发布页，由你检查后手动点击发布。</span>
+      </section>
+
+      <section class="workspace">
+        <form class="compose" id="publishForm">
+          <label class="field">
+            <span>视频标题</span>
+            <input id="titleInput" maxlength="80" placeholder="输入视频标题" autocomplete="off" />
+          </label>
+
+          <label class="field">
+            <span>视频描述</span>
+            <textarea id="descriptionInput" rows="5" placeholder="输入视频描述"></textarea>
+          </label>
+
+          <label class="field">
+            <span>标签</span>
+            <input id="tagsInput" placeholder="标签1 标签2 标签3" autocomplete="off" />
+          </label>
+
+          <div class="upload-grid">
+            <label class="upload-box video-box">
+              <input id="videoInput" type="file" accept="video/mp4,video/webm,video/quicktime,video/*" />
+              <span class="upload-icon">↑</span>
+              <strong>选择视频文件</strong>
+              <small id="videoName">支持 mp4、mov、webm，建议先用小文件验证</small>
+            </label>
+
+            <label class="upload-box">
+              <input id="coverInput" type="file" accept="image/png,image/jpeg,image/webp,image/*" />
+              <span class="upload-icon">▣</span>
+              <strong>竖版封面</strong>
+              <small id="coverName">可选，建议 3:4</small>
+            </label>
+          </div>
+
+          <section class="platform-picker" aria-label="选择平台">
+            <div class="section-title">
+              <h2>同步平台</h2>
+              <button class="text-button" id="selectAllButton" type="button">全选</button>
+            </div>
+            <div class="platform-grid" id="platformGrid"></div>
+          </section>
+
+          <footer class="actions">
+            <p id="formMessage" role="status"></p>
+            <button class="primary-button" id="startButton" type="submit">开始同步</button>
+          </footer>
+        </form>
+
+        <aside class="status-panel">
+          <div class="section-title">
+            <h2>同步状态</h2>
+            <button class="text-button" id="refreshStateButton" type="button">刷新</button>
+          </div>
+          <p class="hint">如果因网络或未登录导致同步未生效，登录后点平台前的刷新按钮重试。同步时请保持浏览器窗口在屏幕前台。</p>
+          <div class="status-list" id="statusList"></div>
+        </aside>
+      </section>
+    </main>
+    <script type="module" src="options.js"></script>
+  </body>
+</html>

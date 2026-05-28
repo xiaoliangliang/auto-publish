@@ -1,0 +1,166 @@
+:root {
+  --bg: #f8fafc;
+  --panel: #ffffff;
+  --soft: #eef4ff;
+  --line: #e2e8f0;
+  --text: #172033;
+  --muted: #697789;
+  --accent: #0f172a;
+  --blue: #2563eb;
+  --danger: #d92d20;
+  --success: #0f8a4b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  width: 360px;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "MiSans", "Microsoft YaHei UI", "Segoe UI", sans-serif;
+}
+
+button {
+  font: inherit;
+}
+
+.popup {
+  padding: 16px;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-mark {
+  display: grid;
+  width: 26px;
+  height: 26px;
+  place-items: center;
+  border-radius: 6px;
+  background: #16a34a;
+  color: white;
+  font-weight: 800;
+}
+
+h1 {
+  margin: 0;
+  font-size: 16px;
+}
+
+p {
+  margin: 3px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.tip {
+  margin: 14px 0;
+  padding: 11px 12px;
+  border: 1px solid #c7dcff;
+  border-radius: 8px;
+  background: var(--soft);
+  color: #29466e;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.status-list {
+  display: grid;
+  gap: 10px;
+}
+
+.status-row {
+  display: grid;
+  grid-template-columns: 30px 22px minmax(0, 1fr) 56px;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 10px;
+  border-radius: 8px;
+  background: var(--panel);
+}
+
+.status-row.active {
+  background: #dbeafe;
+}
+
+.status-row img {
+  width: 22px;
+  height: 22px;
+}
+
+.refresh {
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #475569;
+  cursor: pointer;
+  font-size: 19px;
+}
+
+.main {
+  min-width: 0;
+}
+
+.main strong,
+.main span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.main strong {
+  font-size: 14px;
+}
+
+.main span {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.badge {
+  font-size: 12px;
+  font-weight: 700;
+  text-align: right;
+}
+
+.badge.ready,
+.badge.done {
+  color: var(--success);
+}
+
+.badge.failed {
+  color: var(--danger);
+}
+
+.badge.opening,
+.badge.uploading,
+.badge.filling,
+.badge.running {
+  color: var(--blue);
+}
+
+footer {
+  margin-top: 14px;
+}
+
+footer button {
+  width: 100%;
+  height: 40px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+  font-weight: 700;
+}

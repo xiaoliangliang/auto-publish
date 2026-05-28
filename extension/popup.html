@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>短视频同步助手</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main class="popup">
+      <header>
+        <div class="brand-mark">✓</div>
+        <div>
+          <h1>短视频同步助手</h1>
+          <p>登录后可点刷新重试</p>
+        </div>
+      </header>
+
+      <section class="tip">
+        如果因网络或未登录等原因导致同步未生效，请点击平台前的刷新按钮重试。
+      </section>
+
+      <div class="status-list" id="statusList"></div>
+
+      <footer>
+        <button id="openOptionsButton" type="button">打开工作台</button>
+      </footer>
+    </main>
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>

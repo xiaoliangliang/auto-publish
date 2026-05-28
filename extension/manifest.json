@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "短视频同步助手",
+  "description": "把短视频资料填充到抖音、小红书和视频号后台，停在人工确认发布。",
+  "version": "0.1.0",
+  "permissions": ["storage", "tabs", "scripting", "activeTab", "unlimitedStorage"],
+  "host_permissions": [
+    "https://creator.douyin.com/*",
+    "https://creator.xiaohongshu.com/*",
+    "https://channels.weixin.qq.com/*",
+    "https://*.weixin.qq.com/*",
+    "https://*.qq.com/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "短视频同步助手"
+  },
+  "options_page": "options.html",
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  }
+}
