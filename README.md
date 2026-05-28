@@ -53,3 +53,7 @@ node -e "JSON.parse(require('fs').readFileSync('extension/manifest.json','utf8')
 ## 重要限制
 
 三个平台后台页面经常改版，DOM 选择器和上传入口可能变化。当前 adapter 采用文本和 placeholder 模糊匹配，适合第一轮实测；实测失败后需要根据页面实际 DOM 继续加固。
+
+## 许可证
+
+本项目基于 MIT License 开源，详见 [LICENSE](LICENSE)。
