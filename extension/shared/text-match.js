@@ -54,6 +54,12 @@ export function chooseWechatCoverDialogMatch(items) {
   });
 }
 
+export function chooseXiaohongshuOriginalStatementMatch(items) {
+  return chooseBestTextMatch(items, ["原创声明"], {
+    maxLength: 12,
+  });
+}
+
 export function createStableSourceSignature(value) {
   const source = String(value || "");
   return `${source.length}:${source.slice(0, 80)}:${source.slice(-80)}`;

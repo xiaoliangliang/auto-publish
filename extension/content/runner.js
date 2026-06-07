@@ -606,6 +606,52 @@
         }
       }
 
+      if (platformId === "bilibili") {
+        if (location.host.includes("bilibili.com")) {
+          score += 40;
+          reasons.push("bilibili-host");
+        }
+
+        const editorText = findBestTextElement(["基本设置", "封面", "标题", "标签"], {
+          maxLength: 120,
+        });
+        if (editorText) {
+          score += 60;
+          reasons.push("bilibili-editor-form");
+        }
+
+        const uploadText = findBestTextElement(["视频投稿", "上传视频", "点击上传或将视频拖拽到此区域"], {
+          maxLength: 120,
+        });
+        if (uploadText) {
+          score += 30;
+          reasons.push("bilibili-upload-zone");
+        }
+      }
+
+      if (platformId === "youtube") {
+        if (location.host.includes("studio.youtube.com")) {
+          score += 40;
+          reasons.push("youtube-studio-host");
+        }
+
+        const editorText = findBestTextElement(["详细信息", "标题", "说明", "缩略图"], {
+          maxLength: 120,
+        });
+        if (editorText) {
+          score += 60;
+          reasons.push("youtube-editor-form");
+        }
+
+        const uploadText = findBestTextElement(["上传视频", "选择文件", "将要上传的视频文件拖放到此处"], {
+          maxLength: 120,
+        });
+        if (uploadText) {
+          score += 30;
+          reasons.push("youtube-upload-dialog");
+        }
+      }
+
       if (findBestTextElement(["视频描述", "短标题"], { maxLength: 20 })) {
         score += 20;
         reasons.push("editor-form");

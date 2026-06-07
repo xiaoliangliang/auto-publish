@@ -1,4 +1,4 @@
-export const PLATFORM_ORDER = ["douyin", "xiaohongshu", "wechatChannels"];
+export const PLATFORM_ORDER = ["douyin", "xiaohongshu", "wechatChannels", "bilibili", "youtube"];
 
 export const PLATFORM_CONFIGS = {
   douyin: {
@@ -21,6 +21,20 @@ export const PLATFORM_CONFIGS = {
     icon: "icons/wechat-channels.svg",
     url: "https://channels.weixin.qq.com/platform/post/create",
     adapterFile: "content/adapters/wechat-channels.js",
+  },
+  bilibili: {
+    id: "bilibili",
+    name: "B站创作中心",
+    icon: "icons/bilibili.svg",
+    url: "https://member.bilibili.com/platform/upload/video/frame",
+    adapterFile: "content/adapters/bilibili.js",
+  },
+  youtube: {
+    id: "youtube",
+    name: "YouTube Studio",
+    icon: "icons/youtube.svg",
+    url: "https://studio.youtube.com/channel/UCR-vsPTItFNaehqa0zv4iaA/videos/upload?d=ud&filter=%5B%5D&sort=%7B%22columnType%22%3A%22date%22%2C%22sortOrder%22%3A%22DESCENDING%22%7D",
+    adapterFile: "content/adapters/youtube.js",
   },
 };
 
@@ -65,6 +79,12 @@ export function appendTagsToDescription(description = "", tags = []) {
   return body ? `${body}\n${tagLine}` : tagLine;
 }
 
+export function buildYoutubeTitleField(title = "", description = "", tags = []) {
+  return [String(title || "").trim(), appendTagsToDescription(String(description || "").trim(), tags).trim()]
+    .filter(Boolean)
+    .join("\n");
+}
+
 export function createPublishTask(formData) {
   const title = String(formData?.title || "").trim();
   const description = String(formData?.description || "").trim();
@@ -80,6 +100,7 @@ export function createPublishTask(formData) {
     createdAt: new Date().toISOString(),
     title,
     description,
+    youtubeTitle: buildYoutubeTitleField(title, description, tags),
     tags,
     platforms: { ...formData.platforms },
     queue,

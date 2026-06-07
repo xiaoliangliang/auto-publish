@@ -6,10 +6,12 @@ import {
   buildPlatformQueue,
   createPublishTask,
   normalizeTags,
+  PLATFORM_CONFIGS,
 } from "../extension/shared/payload.js";
 import { joinBase64Chunks, splitBase64IntoChunks } from "../extension/shared/file-chunks.js";
 import {
   chooseBestTextMatch,
+  chooseXiaohongshuOriginalStatementMatch,
   chooseUploadZoneTextMatch,
   chooseWechatCoverDialogMatch,
   chooseWechatPersonalCoverMatch,
@@ -30,16 +32,38 @@ describe("buildPlatformQueue", () => {
   it("keeps the fixed platform order no matter how the selection object is ordered", () => {
     assert.deepEqual(
       buildPlatformQueue({
+        youtube: true,
+        bilibili: true,
         wechatChannels: true,
         douyin: true,
         xiaohongshu: true,
       }).map((item) => item.id),
-      ["douyin", "xiaohongshu", "wechatChannels"],
+      ["douyin", "xiaohongshu", "wechatChannels", "bilibili", "youtube"],
     );
   });
 
   it("throws when no platform is selected", () => {
     assert.throws(() => buildPlatformQueue({}), /至少选择一个平台/);
+  });
+});
+
+describe("PLATFORM_CONFIGS", () => {
+  it("includes Bilibili upload as a sync target with its own adapter", () => {
+    assert.equal(PLATFORM_CONFIGS.bilibili.name, "B站创作中心");
+    assert.equal(
+      PLATFORM_CONFIGS.bilibili.url,
+      "https://member.bilibili.com/platform/upload/video/frame",
+    );
+    assert.equal(PLATFORM_CONFIGS.bilibili.adapterFile, "content/adapters/bilibili.js");
+  });
+
+  it("includes YouTube Studio upload as a sync target with its own adapter", () => {
+    assert.equal(PLATFORM_CONFIGS.youtube.name, "YouTube Studio");
+    assert.equal(
+      PLATFORM_CONFIGS.youtube.url,
+      "https://studio.youtube.com/channel/UCR-vsPTItFNaehqa0zv4iaA/videos/upload?d=ud&filter=%5B%5D&sort=%7B%22columnType%22%3A%22date%22%2C%22sortOrder%22%3A%22DESCENDING%22%7D",
+    );
+    assert.equal(PLATFORM_CONFIGS.youtube.adapterFile, "content/adapters/youtube.js");
   });
 });
 
@@ -56,6 +80,7 @@ describe("createPublishTask", () => {
 
     assert.equal(task.title, "新鞋开箱");
     assert.equal(task.description, "第一眼质感不错");
+    assert.equal(task.youtubeTitle, "新鞋开箱\n第一眼质感不错\n#球鞋 #开箱");
     assert.deepEqual(task.tags, ["球鞋", "开箱"]);
     assert.deepEqual(task.queue.map((item) => item.id), ["douyin", "wechatChannels"]);
     assert.equal(task.video.name, "demo.mp4");
@@ -187,6 +212,18 @@ describe("chooseUploadZoneTextMatch", () => {
     ]);
 
     assert.equal(match.id, "upload-zone");
+  });
+});
+
+describe("chooseXiaohongshuOriginalStatementMatch", () => {
+  it("chooses the original statement switch instead of nearby content setting rows", () => {
+    const match = chooseXiaohongshuOriginalStatementMatch([
+      { id: "content-settings", text: "内容设置 添加章节 加入合集 原创声明 添加内容类型声明 添加地点" },
+      { id: "type-statement", text: "添加内容类型声明" },
+      { id: "original-switch", text: "原创声明" },
+    ]);
+
+    assert.equal(match.id, "original-switch");
   });
 });
 

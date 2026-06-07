@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "短视频同步助手",
-  "description": "把短视频资料填充到抖音、小红书和视频号后台，停在人工确认发布。",
+  "description": "把短视频资料填充到抖音、小红书、视频号、B站和YouTube后台，停在人工确认发布。",
   "version": "0.1.0",
   "permissions": ["storage", "tabs", "scripting", "activeTab", "unlimitedStorage"],
   "host_permissions": [
@@ -9,7 +9,9 @@
     "https://creator.xiaohongshu.com/*",
     "https://channels.weixin.qq.com/*",
     "https://*.weixin.qq.com/*",
-    "https://*.qq.com/*"
+    "https://*.qq.com/*",
+    "https://member.bilibili.com/*",
+    "https://studio.youtube.com/*"
   ],
   "action": {
     "default_popup": "popup.html",

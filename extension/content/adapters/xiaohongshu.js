@@ -76,6 +76,171 @@
         { timeout: 90000, interval: 1000, message: "小红书封面确认后仍在上传中" },
       );
     };
+    const enableOriginalStatement = async () => {
+      const row = await utils.waitFor(
+        () => {
+          const current = findOriginalStatementRow();
+          if (!current) {
+            window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+          }
+          return current;
+        },
+        { timeout: 60000, interval: 800, message: "未找到小红书原创声明开关" },
+      );
+
+      row.scrollIntoView({ block: "center" });
+      await utils.sleep(500);
+      if (isOriginalStatementEnabled(row)) {
+        return;
+      }
+
+      clickElement(findOriginalStatementSwitch(row) || row);
+      await utils.sleep(800);
+
+      const dialog = await utils.waitFor(
+        () => findOriginalStatementDialog() || isOriginalStatementEnabled(findOriginalStatementRow()),
+        { timeout: 30000, interval: 500, message: "小红书原创声明弹窗未出现" },
+      );
+      if (dialog === true) {
+        return;
+      }
+
+      await ensureOriginalStatementAgreementChecked();
+      const confirmButton = await utils.waitFor(
+        () => findOriginalStatementDialogButton("声明原创"),
+        { timeout: 30000, interval: 500, message: "未找到小红书声明原创按钮" },
+      );
+      clickElement(confirmButton);
+
+      await utils.waitFor(
+        () => !findOriginalStatementDialog() || isOriginalStatementEnabled(findOriginalStatementRow()),
+        { timeout: 60000, interval: 500, message: "小红书原创声明确认后未生效" },
+      );
+    };
+    const findOriginalStatementRow = () => {
+      const labels = [...document.querySelectorAll("div, span, label, button, [role='button']")]
+        .filter(isVisible)
+        .filter((element) => utils.normalizeText(element.textContent) === "原创声明");
+
+      for (const label of labels) {
+        let current = label;
+        let best = null;
+        for (let depth = 0; current && current !== document.body && depth < 8; depth += 1) {
+          const text = utils.normalizeText(current.textContent);
+          const rect = current.getBoundingClientRect();
+          if (
+            text.includes("原创声明") &&
+            !text.includes("原创声明须知") &&
+            !text.includes("笔记完成原创声明后") &&
+            text.length <= 40 &&
+            rect.width >= 120 &&
+            rect.height >= 24 &&
+            rect.height <= 120
+          ) {
+            best = current;
+          }
+          current = current.parentElement;
+        }
+        if (best) {
+          return best;
+        }
+      }
+
+      return null;
+    };
+    const findOriginalStatementSwitch = (row) => {
+      if (!row) {
+        return null;
+      }
+
+      return (
+        row.querySelector("input[type='checkbox'], [role='switch'], button[aria-checked], [class*='switch'], [class*='Switch']") ||
+        null
+      );
+    };
+    const isOriginalStatementEnabled = (row) => {
+      const currentRow = row || findOriginalStatementRow();
+      if (!currentRow) {
+        return false;
+      }
+
+      const controls = [
+        findOriginalStatementSwitch(currentRow),
+        ...currentRow.querySelectorAll("input[type='checkbox'], [role='switch'], button[aria-checked], [class*='switch'], [class*='Switch']"),
+      ].filter(Boolean);
+
+      return controls.some((control) => {
+        const className = String(control.className || "").toLowerCase();
+        const ariaChecked = control.getAttribute("aria-checked");
+        const checked = control.checked === true || ariaChecked === "true";
+        const activeClass = /(checked|active|selected|open|on)/.test(className);
+        const colors = [control, ...control.children]
+          .map((element) => getComputedStyle(element).backgroundColor)
+          .join(" ");
+        const activeColor = /rgb\(\s*255\s*,\s*(36|42|46|48|49|51|59|62)/.test(colors);
+        return checked || activeClass || activeColor;
+      });
+    };
+    const findOriginalStatementDialog = () => {
+      const candidates = [...document.querySelectorAll("[role='dialog'], div, section")]
+        .filter(isVisible)
+        .map((element) => ({
+          element,
+          rect: element.getBoundingClientRect(),
+          text: utils.normalizeText(element.textContent),
+        }))
+        .filter(({ rect, text }) => {
+          return (
+            text.includes("声明原创") &&
+            text.includes("我已阅读并同意") &&
+            rect.width >= 360 &&
+            rect.height >= 180 &&
+            rect.width < window.innerWidth * 0.95 &&
+            rect.height < window.innerHeight * 0.95
+          );
+        })
+        .sort((a, b) => a.rect.width * a.rect.height - b.rect.width * b.rect.height);
+
+      return candidates[0]?.element || null;
+    };
+    const ensureOriginalStatementAgreementChecked = async () => {
+      const button = findOriginalStatementDialogButton("声明原创");
+      if (button && !isElementDisabled(button)) {
+        return;
+      }
+
+      const dialog = findOriginalStatementDialog();
+      const agreement = [...(dialog?.querySelectorAll("div, label, span, button, [role='checkbox']") || [])]
+        .filter(isVisible)
+        .find((element) => utils.normalizeText(element.textContent).includes("我已阅读并同意"));
+      if (agreement) {
+        clickElement(agreement.closest("label, button, [role='checkbox']") || agreement);
+      }
+
+      await utils.waitFor(
+        () => {
+          const currentButton = findOriginalStatementDialogButton("声明原创");
+          return currentButton && !isElementDisabled(currentButton);
+        },
+        { timeout: 10000, interval: 300, message: "小红书原创声明协议未勾选" },
+      );
+    };
+    const findOriginalStatementDialogButton = (text) => {
+      const dialog = findOriginalStatementDialog();
+      return [...(dialog?.querySelectorAll("button, [role='button'], div") || [])]
+        .filter(isVisible)
+        .find((element) => {
+          const normalized = utils.normalizeText(element.textContent);
+          return normalized === text && normalized.length <= 8 && !isElementDisabled(element);
+        });
+    };
+    const isElementDisabled = (element) => {
+      return (
+        element.disabled ||
+        element.getAttribute("aria-disabled") === "true" ||
+        String(element.className || "").toLowerCase().includes("disabled")
+      );
+    };
 
     if (!isEditorReady()) {
       await bridge.updateStatus({ status: "uploading", message: "小红书：正在读取并上传视频", active: true });
@@ -125,8 +290,15 @@
       }
     }
 
+    try {
+      await bridge.updateStatus({ status: "filling", message: "小红书：正在勾选原创声明", active: true });
+      await enableOriginalStatement();
+    } catch (error) {
+      warnings.push(`原创声明需手动勾选：${error.message}`);
+    }
+
     return {
-      message: warnings.length ? "文案已填充，封面可能需要手动确认" : "已填充，等待人工确认发布",
+      message: warnings.length ? "文案已填充，部分设置可能需要手动确认" : "已填充，等待人工确认发布",
       warnings,
     };
   };
